@@ -128,7 +128,7 @@ const Bar = () => {
                     type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                    Sign In
+                    Sign up
                     </button>
                 </div>
                 </form>
@@ -143,13 +143,13 @@ const Bar = () => {
                 <button
                     type="button"
                     className="w-full inline-flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-white hover:bg-gray-50"
-                >
+                    onClick={() => window.location.href = ' https://fti-nexus-backend.onrender.com/api/v1/auth/signup/google'}>
                     <img
                     src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
                     alt="Google"
                     className="w-5 h-5 mr-2"
                     />
-                    Sign in with Google
+                    Sign up with Google
                 </button>
                 </div>
 
