@@ -2,3 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
+small{
+    visibility: visible;
+    margin: 0;
+    padding: 0;
+}
+
+small{
+    color: #e74c3c;
+    /* position: absolute;
+    bottom: 0;
+    left: 0; */
+    margin: 0;
+    padding: 0;
+    visibility: hidden;
+}
+
+.form-control.success input{
+    border-color: #2ecc71;
+    visibility: visible;
+}
+
+.form-control.error input{
+    border-color: #e74c3c;
+    visibility: visible;
+}

@@ -1,3 +1,10 @@
+import { useState } from "react";
+import { toast } from "react-hot-toast";
+import { auth } from "../components/firebase";
+import SignInwithGoogle from "../components/SignInWithGoogle";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+
 const Bar = () => {
     return (
       <nav className="bg-gray-100 fixed top-0 left-0 w-full z-10 shadow-sm">
@@ -6,7 +13,7 @@ const Bar = () => {
             {/* Website Logo */}
             <div className="flex items-center">
               <a href="/"><img
-                src="https://via.placeholder.com/40"
+                src="https://img.icons8.com/?size=40&id=dnnhw9tu3iTE&format=png&color=000000"
                 alt="Logo"
                 className="mr-3"
               /></a>
@@ -32,6 +39,29 @@ const Bar = () => {
 
 
 const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        console.log("User logged in Successfully");
+        window.location.href = "/complete-profile";
+        toast.success("User logged in Successfully", {
+          position: 'top-right',
+        });
+      } catch (error) {
+        console.log(error.message);
+
+        toast.error(error.message, {
+          position: "bottom-right",
+        });
+      }
+    };
+
+
     return (
     <>
         <div className="flex flex-col min-h-screen justify-center items-center bg-gray-100">
@@ -41,15 +71,15 @@ const Login = () => {
             {/* Content */}
             <div className="w-full max-w-md mt-16 px-6 py-8 ">
                 <div className="text-center mb-6">
-                <a href="/"><img
-                    src="https://via.placeholder.com/50"
+                {/* <a href="/"><img
+                    src="https://img.icons8.com/?size=50&id=dnnhw9tu3iTE&format=png&color=000000"
                     alt="Logo"
                     className="mx-auto mb-4"
-                /></a>
+                /></a> */}
                 <h1 className="text-2xl font-semibold text-gray-700">Sign In</h1>
                 </div>
 
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                     <label
                     htmlFor="email"
@@ -61,25 +91,39 @@ const Login = () => {
                     type="email"
                     name="email"
                     id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
                     placeholder="Enter your email"
                     />
                 </div>
 
                 <div>
-                    <label
+                  <label
                     htmlFor="password"
                     className="block text-sm font-medium text-gray-700"
-                    >
+                  >
                     Password
-                    </label>
+                  </label>
+                  <div className="relative">
                     <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
-                    placeholder="Enter your password"
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
+                      placeholder="Enter your password"
                     />
+                    {/* <small>Error message</small> */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-2 top-3 text-sm text-gray-600"
+                    >
+                      {showPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -124,19 +168,7 @@ const Login = () => {
                 <span className="border-t w-full border-gray-300"></span>
                 </div>
 
-                <div className="mt-6">
-                <button
-                    type="button"
-                    className="w-full inline-flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-500 bg-white hover:bg-gray-50"
-                >
-                    <img
-                    src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
-                    alt="Google"
-                    className="w-5 h-5 mr-2"
-                    />
-                    Sign in with Google
-                </button>
-                </div>
+                <SignInwithGoogle />
 
                 <p className="mt-6 text-center text-sm text-gray-500">
                 Don’t have an account?{" "}

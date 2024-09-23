@@ -7,6 +7,42 @@ const HomePage = () => {
     <>
       <NavBar />
 
+      <section style={{ backgroundImage: 'url(/images/2.svg)' }} className="bg-gray-50 py-8 bg-cover">
+      <div className="container mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
+        {/* Left Content: Heading, Subheading, CTA */}
+        <div className=" md:text-left md:w-1/2">
+          <h1 className="text-4xl font-bold text-gray-800 leading-tight">
+            Unlock Your Trading Potential with FTI Nexus
+          </h1>
+          <p className="mt-4 text-gray-600 text-lg">
+            Discover our platform for freelance trading, investment opportunities, and much more. Empower your financial future with the tools and insights you need.
+          </p>
+          <div className="mt-6 space-x-4">
+            <a
+              href="/get-started"
+              className="bg-indigo-700 text-white px-6 py-3 rounded-lg hover:bg-indigo-800 transition"
+            >
+              Get Started
+            </a>
+            <a
+              href="/learn-more"
+              className="text-indigo-700 border border-indigo-700 px-6 py-3 rounded-lg hover:bg-indigo-700 hover:text-white transition"
+            >
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        {/* Right Content: Image */}
+        <div className="md:w-1/2 mb-8 md:mb-0">
+          <img
+            src="../images/3.png"
+            alt="Trading Illustration"
+            className="w-90 h-auto"
+          />
+        </div>
+      </div>
+    </section>
     
       {/* Features Section */}
       <section className="bg-white py-20">
