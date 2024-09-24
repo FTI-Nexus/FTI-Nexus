@@ -5,6 +5,13 @@ import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import ArticalPage from "./pages/ArticalPage";
 import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
+import NotFoundPage from "./pages/NotFoundPage";
+import 'react-toastify/dist/ReactToastify.css';
+
+
+
+
 
 function App() {
 
@@ -17,6 +24,8 @@ function App() {
        <Route path="/create-account" element={<CreateAccount />}/>
        <Route path="/learn-more" element={<ArticalPage />} />
        <Route path="/reset-password" element={<ResetPassword />}/>
+       <Route path="/forgot-password" element={<ForgotPassword />}/>
+       <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
     </>

@@ -3,7 +3,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { auth, db } from "../components/firebase"; 
 import SignUpwithGoogle from "../components/SignUpWithGoogle";
-import { toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import Bar from "../partials/SubHeader";
 
 
@@ -138,6 +138,7 @@ const CreateAccount = () => {
   return (
     <>
     <div className="flex flex-col items-center justify-center m-h-screen bg-gray-100">
+      <Toaster />
       <Bar />
       <div className="w-full max-w-md mt-20 py-8 px-6">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">

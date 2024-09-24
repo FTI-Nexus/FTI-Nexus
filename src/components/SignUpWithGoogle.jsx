@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState } from "react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "./firebase";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { setDoc, doc } from "firebase/firestore";
 
 
@@ -102,6 +102,7 @@ const SignUpwithGoogle = () => {
 
   return (
     <div className="mt-6">
+      <ToastContainer />
       {!additionalInfo ? (
         // Google Sign-In Button
         <button
