@@ -9,7 +9,7 @@ const Footer = () => {
                 <div>
                 <h4 className="font-bold text-gray-800 mb-2">Contact</h4>
                 <p className="text-gray-600">FTI Nexus Inc.</p>
-                <p className="text-gray-600">+2335673747865</p>
+                <p className="text-gray-600">+233-56-737-4786</p>
                 <p className="text-gray-600">support@ftinexus.com</p>
                 <p className="text-gray-600">Kumasi - Ghana</p>
                 </div>
@@ -18,9 +18,9 @@ const Footer = () => {
                 <div>
                 <h4 className="font-bold text-gray-800 mb-2">Legal</h4>
                 <ul>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Terms of Use</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Privacy Policy</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Twitter</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Terms of Use</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Privacy Policy</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Twitter</a></li>
                 </ul>
                 </div>
 
@@ -28,9 +28,9 @@ const Footer = () => {
                 <div>
                 <h4 className="font-bold text-gray-800 mb-2">Support</h4>
                 <ul>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">FAQ</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Contact Us</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Privacy Policy</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">FAQ</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Contact Us</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Privacy Policy</a></li>
                 </ul>
                 </div>
 
@@ -38,9 +38,9 @@ const Footer = () => {
                 <div>
                 <h4 className="font-bold text-gray-800 mb-2">Trading Resources</h4>
                 <ul>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Tutorials</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Webinars</a></li>
-                    <li><a href="#" className="text-gray-600 hover:text-indigo-600">Market Analysis</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Tutorials</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Webinars</a></li>
+                    <li><a href="#" className="text-gray-600 hover:text-indigo-600 hover:underline">Market Analysis</a></li>
                 </ul>
                 </div>
             </div>

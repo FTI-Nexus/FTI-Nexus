@@ -9,52 +9,49 @@ import Bar from "../partials/SubHeader";
 
 
 const CreateAccount = () => {
-  const [step, setStep] = useState(1); // Track the current step
+  const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmpassword: "",
-    verificationCode: "",
-    name: "",
-    dob: "",
-    country: "",
-    phone: ""
+    firstName: "",
+    lastName: "",
+    gender: "",
+    dateOfBirth: "",
+    countryOfOrigin: "",
+    phone: "",
+    accountType: ""
   });
 
   const [error, setError] = useState(null);
-  const [verificationSent, setVerificationSent] = useState(false); // Track email verification
-  const [emailVerified, setEmailVerified] = useState(false); // Track whether the email is verified
-  
-  // Handle form field changes
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Go to next step
   const nextStep = () => {
     setStep(step + 1);
   };
 
-  // Go to previous step
   const prevStep = () => {
     setStep(step - 1);
   };
 
-  // Handle account creation and send email verification
   const handleAccountCreation = async () => {
-     // Check if either password field is blank
     if (!formData.password || !formData.confirmpassword) {
       setError("Passwords cannot be blank.");
       return;
     }
 
-    // Check if passwords match
     if (formData.password !== formData.confirmpassword) {
       setError("Passwords do not match.");
       return;
     }
 
+    
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -64,63 +61,77 @@ const CreateAccount = () => {
       );
       const user = userCredential.user;
 
-      // Send email verification
       await sendEmailVerification(user);
-      setVerificationSent(true); // Mark verification email sent
-      toast.success("Verification email sent. Please check your inbox.", {
-        position:'top-right'
-      });
+      setVerificationSent(true);
+      toast.success("Verification email sent. Please check your inbox.");
       nextStep();
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Poll for email verification status
   useEffect(() => {
     let intervalId;
     if (verificationSent) {
       intervalId = setInterval(async () => {
         const user = auth.currentUser;
-        await user.reload(); // Reload user state to check verification status
+        await user.reload();
         if (user.emailVerified) {
-          setEmailVerified(true); // Enable the button when verified
-          clearInterval(intervalId); // Stop polling after verification
+          setEmailVerified(true);
+          clearInterval(intervalId);
         }
-      }, 3000); // Check every 3 seconds
+      }, 3000);
     }
 
-    // Cleanup interval when component unmounts
     return () => clearInterval(intervalId);
   }, [verificationSent]);
 
-  // Final submit (after verifying the email)
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = auth.currentUser;
     
     try {
-      await user.reload(); // Refresh user data
-
+      await user.reload();
       if (user.emailVerified) {
-        // Store user data in Firestore
         await setDoc(doc(db, "users", user.uid), {
           email: formData.email,
-          name: formData.name,
-          dob: formData.dob,
-          country: formData.country,
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          gender: formData.gender,
+          dateOfBirth: formData.dob,
+          countryOfOrigin: formData.country,
           phone: formData.phone,
+          accountType: formData.accountType,
           createdAt: new Date().toISOString()
         });
 
-        console.log("User data saved to Firestore:", formData);
-        window.location.href = "/complete-profile"; // Redirect after successful form submission
+        // Send data to API Endpoint
+        const response = await axios.post('https://fti-nexus-backend.onrender.com/api/v1/auth/signup', {
+          email: formData.email,
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          gender: formData.gender,
+          dateOfBirth: formData.dob,
+          countryOfOrigin: formData.country,
+          phone: formData.phone,
+          accountType: formData.accountType,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+
+        if (!response.ok) {
+          throw new Error("Failed to send data to API EndPoint");
+        }
+
+        window.location.href = "/complete-profile";
       } else {
         setError("Please verify your email before proceeding.");
       }
     } catch (err) {
       setError(err.message);
-      console.error("Error saving user data:", err);
     }
   };
 
@@ -128,14 +139,16 @@ const CreateAccount = () => {
     <>
     <div className="flex flex-col items-center justify-center m-h-screen bg-gray-100">
       <Bar />
-      <div className="w-full max-w-md mt-16 py-8 px-6">
+      <div className="w-full max-w-md mt-20 py-8 px-6">
         <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">
           {step === 1 && "Create Account"}
           {step === 2 && "Verify Email"}
           {step === 3 && "Enter Name"}
-          {step === 4 && "Enter Date of Birth"}
-          {step === 5 && "Enter Phone Number"}
-          {step === 6 && "Select Country"}
+          {step === 4 && "Enter Gender"}
+          {step === 5 && "Enter Date of Birth"}
+          {step === 6 && "Enter Phone Number"}
+          {step === 7 && "Select Account Type"}
+          {step === 8 && "Select Country"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Step 1: Email and Password */}
@@ -215,49 +228,49 @@ const CreateAccount = () => {
           {/* Step 2: Email Verification */}
           {step === 2 && (
             <>
-              <div>
-                <label htmlFor="verificationCode" className="block text-sm font-medium text-gray-700">
-                  Verification Code
-                </label>
-                <p className="text-sm text-gray-500">
-                  We sent a verification code to {formData.email}. Please check your inbox and verify your email.
-                </p>
-              </div>
-
+              <p>We sent a verification email to {formData.email}. Please check your inbox and verify your email.</p>
               <button
                 type="button"
                 onClick={async () => {
                   const user = auth.currentUser;
                   await user.reload();
-                  
                   if (user.emailVerified) {
                     nextStep();
                   } else {
                     setError("Please verify your email before proceeding.");
                   }
                 }}
-                className={`w-full px-4 py-2 font-bold text-white ${
-                  emailVerified ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-400'
-                } rounded-md`}
-                disabled={!emailVerified}
+                className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
               >
                 Proceed
               </button>
             </>
           )}
 
-          {/* Step 3: Name */}
+          {/* Step 3: Enter Name */}
           {step === 3 && (
             <>
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                <label htmlFor="firstname" className="block text-sm font-medium text-gray-700">First Name</label>
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="firstname"
+                  value={formData.firstname}
                   onChange={handleChange}
-                  placeholder="Enter your name"
                   required
+                  placeholder="Enter your first name"
+                  className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
+                />
+              </div>
+              <div>
+                <label htmlFor="lastname" className="block text-sm font-medium text-gray-700">Last Name</label>
+                <input
+                  type="text"
+                  name="lastname"
+                  value={formData.lastname}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your last name"
                   className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
                 />
               </div>
@@ -271,8 +284,36 @@ const CreateAccount = () => {
             </>
           )}
 
-          {/* Step 4: Date of Birth */}
+          {/* Step 4: Enter Gender */}
           {step === 4 && (
+            <>
+              <div>
+                <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  required
+                  className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
+                >
+                  <option value="">Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                onClick={nextStep}
+                className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+              >
+                Next
+              </button>
+            </>
+          )}
+
+          {/* Step 5: Enter Date of Birth */}
+          {step === 5 && (
             <>
               <div>
                 <label htmlFor="dob" className="block text-sm font-medium text-gray-700">Date of Birth</label>
@@ -295,23 +336,46 @@ const CreateAccount = () => {
             </>
           )}
 
-          {/* Step 5: Country */}
+          {/* Step 6: Enter Phone Number */}
           {step === 6 && (
             <>
               <div>
-                <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  placeholder="Enter your phone number"
+                  className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={nextStep}
+                className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+              >
+                Next
+              </button>
+            </>
+          )}
+
+          {/* Step 7: Select Account Type */}
+          {step === 7 && (
+            <>
+              <div>
+                <label htmlFor="accountType" className="block text-sm font-medium text-gray-700">Account Type</label>
                 <select
-                  name="country"
-                  value={formData.country}
+                  name="accountType"
+                  value={formData.accountType}
                   onChange={handleChange}
                   required
                   className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
                 >
-                  <option value="">Select your country</option>
-                  <option value="USA">United States</option>
-                  <option value="UK">United Kingdom</option>
-                  <option value="Canada">Canada</option>
-                  {/* Add more countries as needed */}
+                  <option value="">Select account type</option>
+                  <option value="trader">Trader Account</option>
+                  <option value="investor">Investor Account</option>
                 </select>
               </div>
               <button
@@ -324,21 +388,20 @@ const CreateAccount = () => {
             </>
           )}
 
-          {/* Step 6: Phone Number */}
-          {step === 5 && (
+          {/* Step 8: Select Country */}
+          {step === 8 && (
             <>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
                 <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
+                  type="text"
+                  name="country"
+                  value={formData.country}
                   onChange={handleChange}
-                  placeholder="Enter your phone number"
                   required
+                  placeholder="Enter your country"
                   className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
                 />
-                
               </div>
               <button
                 type="submit"
