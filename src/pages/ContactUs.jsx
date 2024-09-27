@@ -4,11 +4,7 @@ import Footer from "../partials/Footer";
 const ContactUs = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
-      {/* Hero Section */}
-      <section className="bg-indigo-600 text-white py-12 text-center">
-        <h2 className="text-4xl font-bold">Get In Touch</h2>
-        <p className="text-lg mt-4">We’d love to hear from you. Whether you have a question or need assistance, we're here to help!</p>
-      </section>
+      <NavBar />
 
       {/* Contact Form Section */}
       <section className="flex-grow container mx-auto px-6 py-12">
@@ -53,12 +49,7 @@ const ContactUs = () => {
       </section>
 
       {/* Footer Section */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="container mx-auto text-center">
-          <p>&copy; 2024 FTI Nexus. All rights reserved.</p>
-          <p className="mt-2">Kumasi, Ghana | support@ftinexus.com | +2335673747865</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

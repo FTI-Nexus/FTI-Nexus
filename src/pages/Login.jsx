@@ -12,7 +12,7 @@ const Login = () => {
         email: "",
         password: "",
     });
-    const [rememberMe, setRememberMe] = useState(false); //state for Remember Me
+    const [rememberMe, setRememberMe] = useState(false); // State for Remember Me
     const [error, setError] = useState(null);
 
     const handleChange = (e) => {
@@ -30,7 +30,7 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
             console.log("User logged in Successfully");
 
-            // After successful login, send data to API Endpoint
+            // Send data to your backend login API
             const response = await axios.post('https://fti-nexus-backend.onrender.com/api/v1/auth/login', {
                 email: formData.email,
                 password: formData.password,
@@ -41,25 +41,32 @@ const Login = () => {
                 },
             });
 
-            // Check response and handle session persistence
-            if (response.status === 200) {
-                // Setting the session cookie with a long expiry if Remember Me is checked
-                const token = response.data.token; // if the API returns a token
-                const expirationTime = rememberMe ? 30 * 24 * 60 * 60 * 1000 : null; // 30 days if Remember Me is checked
-                
-                document.cookie = `authToken=${token}; max-age=${expirationTime}; path=/`;
+            // If API returns a success response
+            if (response.status === 201 || response.status === 200) {
+                const token = response.data.token; // JWT token from API
 
-                // After Successful API response, redirect or perform any necessary actions
-                window.location.href = "/complete-profile"; // Redirect after successful login
-                toast.success("User logged in Successfully", {
+                // Save token in cookie or sessionStorage based on Remember Me state
+                if (rememberMe) {
+                    // Store token in a cookie with 30 days expiration
+                    const expirationTime = 30 * 24 * 60 * 60; // 30 days in seconds
+                    document.cookie = `authToken=${token}; max-age=${expirationTime}; path=/`;
+                } else {
+                    // Store token in sessionStorage (expires on session end)
+                    sessionStorage.setItem("authToken", token);
+                }
+
+                // Redirect user after successful login
+                window.location.href = "/complete-profile";
+                toast.success("User logged in successfully", {
                     position: 'top-right',
                 });
             } else {
                 throw new Error("Failed to log in via API");
             }
         } catch (error) {
-            // setError(error.message);
-            toast.error('Email does not exits', {
+            // Handle errors
+            setError(error.response?.data?.message || 'Login failed, please try again.');
+            toast.error(error.response?.data?.message || 'Email or password is incorrect', {
                 position: "top-right",
             });
         }
@@ -107,19 +114,18 @@ const Login = () => {
                         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
                     </div>
 
-                    {/* Remember Me Checkbox and Forgot password*/}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                          <input
-                              type="checkbox"
-                              id="remember-me"
-                              checked={rememberMe}
-                              onChange={handleRememberMeChange}
-                              className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                          />
-                          <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                              Remember Me
-                          </label>
+                            <input
+                                type="checkbox"
+                                id="remember-me"
+                                checked={rememberMe}
+                                onChange={handleRememberMeChange}
+                                className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                            />
+                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                                Remember Me
+                            </label>
                         </div>
                         
                         <div>

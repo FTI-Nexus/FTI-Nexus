@@ -44,7 +44,7 @@ const HomePage = () => {
               </p>
               <div className="mt-6 space-x-4">
                 <a
-                  href="/get-started"
+                  href="/create-account"
                   className="bg-indigo-700 text-white px-6 py-3 rounded-lg hover:bg-indigo-800 transition"
                 >
                   Get Started

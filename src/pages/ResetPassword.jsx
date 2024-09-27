@@ -1,9 +1,10 @@
 import Bar from "../partials/SubHeader";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { db } from "../components/firebase"; 
 import { doc, updateDoc } from "firebase/firestore"; 
+import { useLocation } from "react-router-dom"; // useLocation to get the query parameters
 
 const CreateNewPassword = () => {
     const [formData, setFormData] = useState({
@@ -11,6 +12,17 @@ const CreateNewPassword = () => {
         confirmPassword: "",
     });
     const [error, setError] = useState(null);
+    const [token, setToken] = useState(null); // State for JWT token
+
+    // useLocation to get the token from the URL
+    const location = useLocation();
+
+    useEffect(() => {
+        // Extracting the token from the URL
+        const queryParams = new URLSearchParams(location.search);
+        const tokenFromURL = queryParams.get('token'); // Assuming your URL has ?token=someToken
+        setToken(tokenFromURL);
+    }, [location]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -19,7 +31,6 @@ const CreateNewPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.confirmPassword) {
-            // setError("Passwords do not match");
             toast.error("Passwords do not match", {
                 position: "top-right",
             });
@@ -30,20 +41,20 @@ const CreateNewPassword = () => {
             // API response to set new password
             const response = await axios.post('https://fti-nexus-backend.onrender.com/api/v1/auth/reset-password', {
                 password: formData.password, 
-                token: 'user-reset-token', // This will be replace with actual token
+                token: token, // Using the extracted token
             }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 toast.success("Password updated successfully", {
                     position: 'top-right',
                 });
 
                 // After successful password reset, update Firestore data
-                const userRef = doc(db, "users", user.uid);
+                const userRef = doc(db, "users", response.data.userId); // Adjust to your response structure
                 await updateDoc(userRef, {
                     passwordUpdated: true, 
                     passwordResetTimestamp: new Date(), // Log the time of the reset
@@ -65,8 +76,11 @@ const CreateNewPassword = () => {
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
             <ToastContainer />
             <Bar />
-            <div className="w-full max-w-md mt-20 py-8 px-6">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-700 text-center">Create New Password</h2>
+            <div className="w-full max-w-md mt-16 py-8 px-6">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold text-gray-800">Create New Password</h1>
+                    <p className="mt-2 text-gray-600 text-sm">Enter a new password to change your password.</p>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="password" className="block text-sm font-medium text-gray-700">New Password</label>
@@ -81,7 +95,7 @@ const CreateNewPassword = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm New Password</label>
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
                         <input
                             type="password"
                             name="confirmPassword"
