@@ -1,34 +1,18 @@
-import { useState, useEffect } from 'react';
 import {FAQAccordion, TestimonialCard, StepCard} from '../partials/FAQ';
 import NavBar from "../partials/NavBar";
 import Footer from "../partials/Footer";
-import Loader from '../partials/Loader';
 
 
 
 const HomePage = () => {
-  const [loading, setLoading] = useState(true); // Set loading state
-
-  useEffect(() => {
-    const loadData = async () => {
-      setTimeout(() => {
-        setLoading(false); // Set loading to false once content is loaded
-      }, 3000); 
-    };
-
-    loadData();
-  }, []);
-
+  
 
 
 
 
     return(
     <>
-    <div>
-      {loading ? (
-        <Loader />
-      ):(
+  
         <div>
           <NavBar />
 
@@ -218,8 +202,7 @@ const HomePage = () => {
 
           <Footer />
         </div>
-      )}
-    </div>
+     
       
 
     </>
