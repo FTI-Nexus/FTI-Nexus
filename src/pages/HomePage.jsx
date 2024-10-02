@@ -16,11 +16,11 @@ const HomePage = () => {
         <div>
           <NavBar />
 
-          <section style={{ backgroundImage: 'url(/images/2.svg)' }} className="bg-gray-50 py-8 bg-cover">
-          <div className="container mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-6">
+          <div style={{ backgroundImage: 'url(/images/2.svg)' }} className="py-8 bg-cover">
+          <div className="container mx-auto flex flex-col-reverse md:flex-row items-center justify-between px-10">
             {/* Left Content: Heading, Subheading, CTA */}
             <div className=" md:text-left md:w-1/2">
-              <h1 className="text-4xl font-bold text-gray-800 leading-tight">
+              <h1 className="text-3xl font-bold text-gray-800 leading-tight">
                 Unlock Your Trading Potential with FTI Nexus
               </h1>
               <p className="mt-4 text-gray-600 text-lg">
@@ -43,18 +43,18 @@ const HomePage = () => {
             </div>
 
             {/* Right Content: Image */}
-            <div className="md:w-1/2 mb-8 md:mb-0">
+            <div className="md:w-1/3 mb-8 md:mb-0">
               <img
                 src="../images/3.png"
                 alt="Trading Illustration"
-                className="w-90 h-auto"
+                className="w-80 h-3/6"
               />
             </div>
           </div>
-          </section>
+          </div>
 
           {/* Features Section */}
-          <section className="bg-white py-20">
+          <div className="bg-white py-20">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12">
                 <h3 className="text-3xl font-bold text-gray-800">Why Choose Us?</h3>
@@ -76,10 +76,10 @@ const HomePage = () => {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
           {/* How it works */}
-          <section className="bg-gray-50 py-20">
+          <div className="bg-gray-50 py-20">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12">
                 <h3 className="text-3xl font-bold text-gray-800">How It Works</h3>
@@ -114,12 +114,12 @@ const HomePage = () => {
                 />
               </div>
             </div>
-          </section>
+          </div>
 
 
 
           {/* FAQ */}
-          <section className="bg-gray-50 py-20">
+          <div className="bg-gray-50 py-20">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12">
                 <h3 className="text-4xl font-bold text-gray-800">FAQs</h3>
@@ -150,22 +150,22 @@ const HomePage = () => {
                 />
               </div>
             </div>
-          </section>
+          </div>
 
 
 
 
           {/* Call-to-Action Section */}
-          <section className="bg-indigo-600 py-20 text-white text-center">
+          <div className="bg-indigo-600 py-20 text-white text-center">
             <div className="container mx-auto px-6">
               <h3 className="text-3xl font-bold mb-4">Ready to Start Trading?</h3>
               <p className="mb-6">Sign up today and take your trading to the next level.</p>
               <a href="/create-account" className="bg-white text-indigo-600 py-3 px-6 rounded-lg shadow hover:bg-gray-100">Join Now</a>
             </div>
-          </section>
+          </div>
 
           {/* Testimonial */}
-          <section className="bg-gray-50 py-20 text-gray-800">
+          <div className="bg-gray-50 py-20 text-gray-800">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12">
                 <h3 className="text-3xl font-bold">What Our Users Are Saying</h3>
@@ -193,7 +193,7 @@ const HomePage = () => {
                 />
               </div>
             </div>
-          </section>
+          </div>
 
 
 

@@ -13,7 +13,7 @@ const NavBar = () => {
               {/* Logo */}
               <div className="flex items-center space-x-2">
                 <a href="/"><img
-                  src="https://img.icons8.com/?size=100&id=dnnhw9tu3iTE&format=png&color=000000"
+                  src="./images/logo.png"
                   alt="Logo"
                   className="h-10 w-10"
                 /></a>
@@ -86,7 +86,7 @@ const NavBar = () => {
               <a href="#" className="block text-gray-700 py-2 hover:text-indigo-600">Top Market</a>
               <a href="#" className="block text-gray-700 py-2 hover:text-indigo-600">Founded</a>
               <a href="#" className="block text-gray-700 py-2 hover:text-indigo-600">Promotion</a>
-              <a href="#" className="block text-gray-700 mb-5 py-2 hover:text-indigo-600">About Us</a>
+              <a href="/about-us" className="block text-gray-700 mb-5 py-2 hover:text-indigo-600">About Us</a>
               <a href="/login" className="block text-center text-indigo-700 py-2 rounded-lg border hover:text-indigo-600">Log In</a>
               <a href="/create-account" className="block text-center bg-indigo-700 text-white px-4 py-2 mt-2 rounded-lg hover:bg-indigo-800">Register</a>
             </div>

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+img {
+  aspect-ratio: auto 640 / 360;
+}
+
 small{
     visibility: visible;
     margin: 0;
@@ -85,25 +90,25 @@ small{
   animation-delay: .4s;
 }
 
-  @keyframes rotate {
+@keyframes rotate {
     0% {
       transform: translate(-50%, -50%) rotateZ(0deg);
     }
     100% {
       transform: translate(-50%, -50%) rotateZ(360deg);
     }
-  }
+}
 
-  @keyframes rotateccw {
+@keyframes rotateccw {
     0% {
       transform: translate(-50%, -50%) rotate(0deg);
     }
     100% {
       transform: translate(-50%, -50%) rotate(-360deg);
     }
-  }
+}
 
-  @keyframes spin {
+@keyframes spin {
     0%,
     100% {
       box-shadow: .2em 0px 0 0px currentcolor;
@@ -129,4 +134,6 @@ small{
     87% {
       box-shadow: .2em -.2em 0 0 currentcolor;
     }
-  }
+}
+
+

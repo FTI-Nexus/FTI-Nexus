@@ -5,13 +5,15 @@ const Bar = () => {
 
 
     return (
-      <nav className="bg-gray-100 fixed top-0 left-0 w-full z-10 shadow-sm">
+      <nav className="bg-gray-50 fixed top-0 left-0 w-full z-10 shadow-sm">
         <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             {/* Website Logo */}
             <div className="flex items-center">
               <a href="/"><img
-                src="https://img.icons8.com/?size=50&id=dnnhw9tu3iTE&format=png&color=000000"
+                src="./images/logo.png"
+                height={50}
+                width={50}
                 alt="Logo"
                 className="mr-3"
               /></a>

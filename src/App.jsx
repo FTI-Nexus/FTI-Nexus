@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
@@ -11,7 +11,10 @@ import ProfilePage from "./components/ProfilePage";
 import AboutPage from "./pages/AboutPage";
 import ContactUs from "./pages/ContactUs";
 import CompleteProfile from "./pages/CompleteProfile";
-import Loader from "./partials/Loader";
+import TermsOfUse from "./components/TermsOfUse";
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import Disclaimer from "./components/Disclaimer";
+import Loader from "./partials/Loader";  // Assuming Loader is your loading spinner
 import { TraderDashboard, InvestorDashboard } from "./Users/DashBoard";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,20 +23,18 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    // Show the loader when navigation
+    // Start loading on route change
     setLoading(true);
 
-    // Set a timer to hide the loader after 3 seconds (3000ms)
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    // Stop loading once the route has changed
+    const handleStopLoading = () => setLoading(false);
+    
+    handleStopLoading(); // Call stop loading immediately after the location changes
   }, [location]);
 
   return (
-    <div>
-      {loading && <Loader />}
+    <>
+      {loading && <Loader />}  {/* Show Loader while loading */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
@@ -46,10 +47,13 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/trader-dashboard" element={<TraderDashboard />} />
         <Route path="/investor-dashboard" element={<InvestorDashboard />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </div>
+    </>
   );
 }
 

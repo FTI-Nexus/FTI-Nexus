@@ -9,7 +9,7 @@ const AboutPage = () => {
 
       {/* Hero Section */}
       <section className="bg-indigo-600 text-white py-20">
-        <div className="container mx-auto px-6 text-center">
+        <div className="container mx-auto px-6 text-center md:text-left">
           <h1 className="text-4xl font-bold mb-4">About FTI Nexus</h1>
           <p className="text-lg">
             Your all-in-one platform for freelance services and smart investment trading. We connect freelancers and investors to empower growth and success.
@@ -21,7 +21,7 @@ const AboutPage = () => {
       <section className="py-16">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-semibold mb-4">Our Story</h2>
-          <p className="text-gray-700 max-w-2xl mx-auto">
+          <p className="text-gray-700 max-w-2xl mx-auto text-left">
             At FTI Nexus, we saw a unique opportunity to combine freelance services with smart trading solutions. Our platform connects talented freelancers with clients while providing a secure investment trading environment, making us the perfect hub for those looking to maximize their potential in both fields.
           </p>
         </div>
@@ -85,7 +85,7 @@ const AboutPage = () => {
             <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-lg">
               <img
                 className="h-24 w-24 rounded-full mx-auto mb-4"
-                src="https://via.placeholder.com/150"
+                src="./images/p1.jpg"
                 alt="Team Member"
               />
               <h4 className="text-lg font-semibold">Herbert</h4>
@@ -96,7 +96,7 @@ const AboutPage = () => {
             <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-lg">
               <img
                 className="h-24 w-24 rounded-full mx-auto mb-4"
-                src="https://via.placeholder.com/150"
+                src="./images/p2.jpg"
                 alt="Team Member"
               />
               <h4 className="text-lg font-semibold">Eric</h4>
@@ -107,7 +107,7 @@ const AboutPage = () => {
             <div className="bg-white p-6 border border-gray-200 rounded-lg shadow-lg">
               <img
                 className="h-24 w-24 rounded-full mx-auto mb-4"
-                src="https://via.placeholder.com/150"
+                src="./images/p3.jpg"
                 alt="Team Member"
               />
               <h4 className="text-lg font-semibold">Bernard</h4>

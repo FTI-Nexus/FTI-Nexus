@@ -73,7 +73,7 @@ const Login = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
             <Bar />
             <Toaster />
             <div className="w-full max-w-md mt-20 py-8 px-6">
@@ -143,9 +143,9 @@ const Login = () => {
                     </button>
 
                     <div className="mt-6 flex items-center justify-between">
-                        <span className="border-t w-full border-gray-300"></span>
-                        <span className="px-4 text-gray-400 text-sm">or</span>
-                        <span className="border-t w-full border-gray-300"></span>
+                        <span className="border-t w-full border-gray-600"></span>
+                        <span className="px-4 text-gray-700 text-sm">or</span>
+                        <span className="border-t w-full border-gray-600"></span>
                     </div>
 
                     <SignInwithGoogle />
