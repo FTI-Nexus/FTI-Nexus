@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { auth } from "./components/firebase";
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
@@ -23,7 +23,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const [user, setUser] = useState();
-  const navigate = useNavigate();
+  
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -47,7 +47,7 @@ function App() {
       <Routes>
       {/* Public Routes */}
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={user ? navigate("/profile")  : <Login />} />
+      <Route path="/login" element={user ? <Navigate to= "/profile" /> : <Login />} />
       <Route path="/create-account" element={<CreateAccount />} />
       <Route path="/about-us" element={<AboutPage />} />
       <Route path="/contact-us" element={<ContactUs />} />
@@ -59,9 +59,9 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Protected Routes */}
-      <Route path="/profile" element={user ? <ProfilePage /> : navigate("/login")} />
-      <Route path="/trader-dashboard" element={user ? <TraderDashboard /> : navigate("/login")} />
-      <Route path="/investor-dashboard" element={user ? <InvestorDashboard /> : navigate("/login") } />
+      <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to= "/login" />} />
+      <Route path="/trader-dashboard" element={user ? <TraderDashboard /> : <Navigate to= "/login" />} />
+      <Route path="/investor-dashboard" element={user ? <InvestorDashboard /> : <Navigate to= "/login" /> } />
 
       {/* Catch-all for undefined routes */}
       <Route path="*" element={<NotFoundPage />} />
