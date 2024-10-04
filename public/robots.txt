@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /login/
+Disallow: /register/
+
+Sitemap: https://www.ftinexus.vercel.app/sitemap.xml

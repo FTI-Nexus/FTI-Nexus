@@ -5,8 +5,10 @@ import SignInwithGoogle from "../components/SignInWithGoogle";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
 import Bar from "../partials/SubHeader";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const [loading, setLoading] = useState(false); 
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
@@ -14,6 +16,7 @@ const Login = () => {
     });
     const [rememberMe, setRememberMe] = useState(false); // State for Remember Me
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -56,7 +59,7 @@ const Login = () => {
                 }
 
                 // Redirect user after successful login
-                window.location.href = "/complete-profile";
+                navigate("/profile");
                 toast.success("User logged in successfully", {
                     position: 'top-right',
                 });
@@ -137,9 +140,10 @@ const Login = () => {
 
                     <button
                         type="submit"
+                        disabled={loading}
                         className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
                     >
-                        Sign In
+                        {loading ? "Signing" : "Sign In"}
                     </button>
 
                     <div className="mt-6 flex items-center justify-between">

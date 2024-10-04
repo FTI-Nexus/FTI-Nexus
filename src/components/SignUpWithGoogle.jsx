@@ -4,6 +4,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "./firebase";
 import { ToastContainer, toast } from "react-toastify";
 import { setDoc, doc } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -11,6 +12,7 @@ const SignUpwithGoogle = () => {
   const [loading, setLoading] = useState(false);  // Loading state for sign-in process
   const [formData, setFormData] = useState({ dateOfBirth: "", gender: "", countryOfOrigin: "" }); // State for additional info
   const [additionalInfo, setAdditionalInfo] = useState(false); // State to show additional form
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -33,7 +35,7 @@ const SignUpwithGoogle = () => {
 
         // Store Google user data in Firestore
         await setDoc(
-          doc(db, "Users", user.uid),
+          doc(db, "users", user.uid),
           {
             email: user.email,
             firstName,
@@ -86,7 +88,7 @@ const SignUpwithGoogle = () => {
         toast.success("User signed in and data sent to API successfully!", {
           position: "top-center",
         });
-        window.location.href = "/profile";
+        navigate("/profile");
       } else {
         toast.error("Failed to send data to API", {
           position: "top-center",
@@ -126,7 +128,7 @@ const SignUpwithGoogle = () => {
             <input
               type="date"
               name="dob"
-              value={formData.dob}
+              value={formData.dateOfBirth}
               onChange={handleInputChange}
               required
               className="mt-1 block w-full border-gray-300 rounded-md shadow-sm"

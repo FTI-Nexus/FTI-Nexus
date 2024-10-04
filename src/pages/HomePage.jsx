@@ -82,7 +82,7 @@ const HomePage = () => {
           <div className="bg-gray-50 py-20">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold text-gray-800">How It Works</h3>
+                <h3 className="text-3xl font-bold text-gray-800">How It Work</h3>
                 <p className="text-gray-600 mt-4">Get started in just three easy steps.</p>
               </div>
 
@@ -174,19 +174,19 @@ const HomePage = () => {
               {/* Testimonial Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <TestimonialCard
-                  image="/images/p3.jpg"
+                  image="/images/p3.webp"
                   name="Ernest Frimpong"
                   role="Trader"
                   feedback="FTI Nexus has completely changed the way I trade. The tools are top-notch, and the support is phenomenal!"
                 />
                 <TestimonialCard
-                  image="/images/p2.jpg"
+                  image="/images/p2.webp"
                   name="Eric Yeboah"
                   role="Investor"
                   feedback="The platform's analytics and security features give me confidence in my investments. Highly recommended!"
                 />
                 <TestimonialCard
-                  image="/images/p1.jpg"
+                  image="/images/p1.webp"
                   name="Herbert"
                   role="Investor"
                   feedback="I've been able to significantly grow my portfolio with FTI Nexus. It's intuitive, secure, and powerful."

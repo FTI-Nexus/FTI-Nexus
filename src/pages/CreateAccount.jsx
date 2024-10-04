@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore"; 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth, db } from "../components/firebase"; 
 import SignUpwithGoogle from "../components/SignUpWithGoogle";
 import { Toaster, toast } from "react-hot-toast";
@@ -9,6 +10,7 @@ import Bar from "../partials/SubHeader";
 
 
 const CreateAccount = () => {
+  const [loading, setLoading] = useState(false);  // Loading state for sign-in process
   const [step, setStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,10 +29,47 @@ const CreateAccount = () => {
   const [error, setError] = useState(null);
   const [verificationSent, setVerificationSent] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+
+  const countryCodes = {
+    "Afghanistan":"AF", "Albania":"AL", "Algeria":"DZ", "Andorra":"AD", "Angola":"AO", "Antigua and Barbuda":"AG",
+    "Argentina":"AR", "Armenia":"AM", "Australia":"AU", "Austria":"AT", "Azerbaijan":"AZ", "Bahamas":"BS", "Bahrain":"BH",
+    "Bangladesh":"BD", "Barbados":"BB", "Belarus":"BY", "Belgium":"BE", "Belize":"BZ", "Benin":"BJ", "Bhutan":"BT",
+    "Bolivia":"BO", "Bosnia and Herzegovina":"BA", "Botswana":"BW", "Brazil":"BR", "Brunei":"BN", "Bulgaria":"BG",
+    "Burkina Faso":"BF", "Burundi":"BI", "Cabo Verde":"CV", "Cambodia":"KH", "Cameroon":"CM", "Canada":"CA",
+    "Central African Republic":"CF", "Chad":"TD", "Chile":"CL", "China":"CN", "Colombia":"CO", "Comoros":"KM",
+    "Congo, Democratic Republic of the":"CD", "Congo, Republic of the":"CG", "Costa Rica":"CR",
+    "Croatia":"HR", "Cuba":"CU", "Cyprus":"CY", "Czech Republic":"CZ", "Denmark":"DK", "Djibouti":"DJ", "Dominica":"DM",
+    "Dominican Republic":"DO", "Ecuador":"ER", "Egypt":"EG", "El Salvador":"SV", "Equatorial Guinea":"GQ",
+    "Eritrea":"ER", "Estonia":"EE", "Eswatini":"SZ", "Ethiopia":"ET", "Fiji":"FJ", "Finland":"FI", "France":"FR", "Gabon":"GA",
+    "Gambia":"GM", "Georgia":"GE", "Germany":"DE", "Ghana":"GH", "Greece":"GR", "Grenada":"GD", "Guatemala":"GT", "Guinea":"GN",
+    "Guinea-Bissau":"GW", "Guyana":"GY", "Haiti":"HT", "Honduras":"HN", "Hungary":"HU", "Iceland":"IS", "India":"IN",
+    "Indonesia":"ID", "Iran":"IR", "Iraq":"IQ", "Ireland":"IE", "Israel":"IL", "Italy":"IT", "Jamaica":"JM", "Japan":"JP",
+    "Jordan":"JO", "Kazakhstan":"KZ", "Kenya":"KE", "Kiribati":"KI", "Korea, North":"KP", "Korea, South":"KR", "Kosovo":"KO",
+    "Kuwait":"KW", "Kyrgyzstan":"KG", "Laos":"LA", "Latvia":"LV", "Lebanon":"LB", "Lesotho":"LS", "Liberia":"LR", "Libya":"LY",
+    "Liechtenstein":"LI", "Lithuania":"LT", "Luxembourg":"LU", "Madagascar":"MG", "Malawi":"MW", "Malaysia":"MY",
+    "Maldives":"MV", "Mali":"ML", "Malta":"MT", "Marshall Islands":"MH", "Mauritania":"MR", "Mauritius":"MU", "Mexico":"MX",
+    "Micronesia":"FM", "Moldova":"MD", "Monaco":"MC", "Mongolia":"MN", "Montenegro":"ME", "Morocco":"MA", "Mozambique":"MZ",
+    "Myanmar":"MM", "Namibia":"NA", "Nauru":"NR", "Nepal":"NP", "Netherlands":"NL", "New Zealand":"NZ", "Nicaragua":"NI",
+    "Niger":"NE", "Nigeria":"NG", "North Macedonia":"MK", "Norway":"NO", "Oman":"OM", "Pakistan":"PK", "Palau":"PW",
+    "Panama":"PA", "Papua New Guinea":"PG", "Paraguay":"PY", "Peru":"PE", "Philippines":"PH", "Poland":"PL", "Portugal":"PT",
+    "Qatar":"QA", "Romania":"RO", "Russia":"RU", "Rwanda":"RW", "Saint Kitts and Nevis":"KN", "Saint Lucia":"LC",
+    "Saint Vincent and the Grenadines":"VC", "Samoa":"WS", "San Marino":"SM", "Saudi Arabia":"SA", "Senegal":"SN",
+    "Serbia":"RS", "Seychelles":"SC", "Sierra Leone":"SL", "Singapore":"SG", "Slovakia":"SK", "Slovenia":"SI",
+    "Solomon Islands":"SB", "Somalia":"SO", "South Africa":"ZA", "South Sudan":"SS", "Spain":"ES", "Sri Lanka":"LK",
+    "Sudan":"SD", "Suriname":"SR", "Sweden":"SE", "Switzerland":"CH", "Syria":"SY", "Taiwan":"TW", "Tajikistan":"TJ",
+    "Tanzania":"TZ", "Thailand":"TH", "Timor-Leste":"TL", "Togo":"TG", "Tonga":"TO", "Trinidad and Tobago":"TT",
+    "Tunisia":"TN", "Turkey":"TR", "Turkmenistan":"TM", "Tuvalu":"TV", "Uganda":"UG", "Ukraine":"UA", "United Arab Emirates":"AE",
+    "United Kingdom":"UK", "United States":"US", "Uruguay":"UY", "Uzbekistan":"UZ", "Vanuatu":"VU", "Vatican City":"VA",
+    "Venezuela":"VE", "Vietnam":"VN", "Yemen":"YE", "Zambia":"ZM", "Zimbabwe":"ZW"
+
+  };
+
 
   const nextStep = () => {
     setStep(step + 1);
@@ -95,11 +134,11 @@ const CreateAccount = () => {
       if (user.emailVerified) {
         await setDoc(doc(db, "users", user.uid), {
           email: formData.email,
-          firstName: formData.firstname,
-          lastName: formData.lastname,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           gender: formData.gender,
-          dateOfBirth: formData.dob,
-          countryOfOrigin: formData.country,
+          dateOfBirth: formData.dateOfBirth,
+          countryOfOrigin: formData.countryOfOrigin,
           phone: formData.phone,
           accountType: formData.accountType,
           createdAt: new Date().toISOString()
@@ -108,10 +147,10 @@ const CreateAccount = () => {
         // Send data to API Endpoint
         const response = await axios.post('https://fti-nexus-backend.onrender.com/api/v1/auth/signup', {
           email: formData.email,
-          firstName: formData.firstname,
-          lastName: formData.lastname,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           gender: formData.gender,
-          dateOfBirth: formData.dob,
+          dateOfBirth: formData.dateOfBirth,
           countryOfOrigin: formData.country,
           phone: formData.phone,
           accountType: formData.accountType,
@@ -126,7 +165,7 @@ const CreateAccount = () => {
           throw new Error("Failed to send data to API EndPoint");
         }
 
-        window.location.href = "/complete-profile";
+        navigate("/profile");
       } else {
         setError("Please verify your email before proceeding.");
       }
@@ -148,8 +187,8 @@ const CreateAccount = () => {
           {step === 4 && "Enter Gender"}
           {step === 5 && "Enter Date of Birth"}
           {step === 6 && "Enter Phone Number"}
-          {step === 7 && "Select Account Type"}
           {step === 8 && "Select Country"}
+          {step === 7 && "Select Account Type"}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Step 1: Email and Password */}
@@ -256,7 +295,7 @@ const CreateAccount = () => {
                 <input
                   type="text"
                   name="firstname"
-                  value={formData.firstname}
+                  value={formData.firstName}
                   onChange={handleChange}
                   required
                   placeholder="Enter your first name"
@@ -268,7 +307,7 @@ const CreateAccount = () => {
                 <input
                   type="text"
                   name="lastname"
-                  value={formData.lastname}
+                  value={formData.lastName}
                   onChange={handleChange}
                   required
                   placeholder="Enter your last name"
@@ -321,7 +360,7 @@ const CreateAccount = () => {
                 <input
                   type="date"
                   name="dob"
-                  value={formData.dob}
+                  value={formData.dateOfBirth}
                   onChange={handleChange}
                   required
                   className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
@@ -341,20 +380,31 @@ const CreateAccount = () => {
           {step === 6 && (
             <>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  Phone Number
+                </label>
                 <input
                   type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
                   required
-                  placeholder="Enter your phone number"
+                  placeholder="Enter your phone number (e.g. +18062542589)"
                   className="text-black mt-1 px-3 py-2 bg-gray-50 border shadow-sm border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 w-full"
                 />
               </div>
               <button
                 type="button"
-                onClick={nextStep}
+                onClick={() => {
+                  const phoneNumberPattern = /^\+\d{11,15}$/;
+                  if (!phoneNumberPattern.test(formData.phone)) {
+                    toast.error('Please enter a valid phone number in the format +18062542589',{
+                      position: "top-center"
+                    });
+                    return;
+                  }
+                  nextStep(); 
+                }}
                 className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
               >
                 Next
@@ -362,8 +412,9 @@ const CreateAccount = () => {
             </>
           )}
 
-          {/* Step 7: Select Account Type */}
-          {step === 7 && (
+
+          {/* Step 8: Select Account Type */}
+          {step === 8 && (
             <>
               <div>
                 <label htmlFor="accountType" className="block text-sm font-medium text-gray-700">Account Type</label>
@@ -380,17 +431,17 @@ const CreateAccount = () => {
                 </select>
               </div>
               <button
-                type="button"
-                onClick={nextStep}
+                type="submit"
+                disabled={loading}
                 className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
               >
-                Next
+                {loading ? "Processing" : "Done"}
               </button>
             </>
           )}
 
-          {/* Step 8: Select Country */}
-          {step === 8 && (
+          {/* Step 7: Select Country */}
+          {step === 7 && (
             <>
               <div>
                 <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
@@ -403,49 +454,22 @@ const CreateAccount = () => {
                   className="text-black mt-1 px-4 py-2 bg-white border border-gray-300 shadow-sm rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full transition ease-in-out duration-150"
                 >
                   <option value="">Select your country</option>
-                  {[
-                    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda",
-                    "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain",
-                    "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
-                    "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
-                    "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada",
-                    "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros",
-                    "Congo, Democratic Republic of the", "Congo, Republic of the", "Costa Rica",
-                    "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica",
-                    "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea",
-                    "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon",
-                    "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea",
-                    "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India",
-                    "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan",
-                    "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo",
-                    "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",
-                    "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia",
-                    "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico",
-                    "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
-                    "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua",
-                    "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau",
-                    "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
-                    "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia",
-                    "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Saudi Arabia", "Senegal",
-                    "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia",
-                    "Solomon Islands", "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka",
-                    "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan",
-                    "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago",
-                    "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates",
-                    "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City",
-                    "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-                  ].map(country => (
-                    <option key={country} value={country}>{country}</option>
+                  {Object.keys(countryCodes).map(country => (
+                    <option key={country} value={countryCodes[country]}>
+                      {country}
+                    </option>
                   ))}
                 </select>
 
               </div>
               <button
-                type="submit"
+                type="button"
+                onClick={nextStep}
                 className="w-full px-4 py-2 font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
               >
-                Submit
+                Next
               </button>
+              
             </>
           )}
 
