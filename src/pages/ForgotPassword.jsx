@@ -7,7 +7,7 @@ const ForgotPassword = () => {
 
     return (
     <>
-        <div className="flex flex-col min-h-screen justify-center items-center bg-gray-100">
+        <div className="flex flex-col min-h-screen justify-center items-center bg-gray-50">
             {/* bar */}
             <Bar />
 

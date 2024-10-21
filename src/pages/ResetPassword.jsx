@@ -73,7 +73,7 @@ const CreateNewPassword = () => {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
             <ToastContainer />
             <Bar />
             <div className="w-full max-w-md mt-16 py-8 px-6">

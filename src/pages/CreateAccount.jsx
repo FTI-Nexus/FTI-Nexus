@@ -165,7 +165,7 @@ const CreateAccount = () => {
           throw new Error("Failed to send data to API EndPoint");
         }
 
-        navigate("/profile");
+        navigate('/profile');
       } else {
         setError("Please verify your email before proceeding.");
       }

@@ -11,7 +11,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ProfilePage from "./components/ProfilePage";
 import AboutPage from "./pages/AboutPage";
 import ContactUs from "./pages/ContactUs";
-// import CompleteProfile from "./pages/CompleteProfile";
 import TermsOfUse from "./components/TermsOfUse";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import Disclaimer from "./components/Disclaimer";
@@ -22,52 +21,73 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null); // Initialize user as null
   
-
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      setLoading(false); // Set loading to false once auth state is determined
     });
-  });
+
+    return () => unsubscribe(); 
+  }, []);
 
   useEffect(() => {
-    // Start loading on route change
-    setLoading(true);
+    setLoading(true); // Start loading on route change
 
-    // Stop loading once the route has changed
-    const handleStopLoading = () => setLoading(false);
-    
-    handleStopLoading(); // Call stop loading immediately after the location changes
+    switch (location.pathname) {
+      case '/login':
+        document.title = 'Login - FTI Nexus - Trading & Investment Platform';
+        break;
+      case '/create-account':
+        document.title = 'Create Account - FTI Nexus - Trading & Investment Platform';
+        break;
+      case '/profile':
+        document.title = 'Profile - FTI Nexus - Trading & Investment Platform';
+        break;
+      case '/about-us':
+        document.title = 'About Us - FTI Nexus - Trading & Investment Platform';
+        break;
+      case '/contact-us':
+        document.title = 'Contact Us - FTI Nexus - Trading & Investment Platform';
+        break;
+      case '/trader-dashboard':
+        document.title = 'Trader Dashboard - FTI Nexus - Trading & Investment Platform';
+        break;
+      case '/investor-dashboard':
+        document.title = 'Investor Dashboard - FTI Nexus - Trading & Investment Platform';
+        break;
+      default:
+        document.title = 'FTI Nexus - Trading & Investment Platform';
+    }
   }, [location]);
 
   return (
-    <>
+    <React.Fragment>
       {loading && <Loader />}  {/* Show Loader while loading */}
       <Routes>
-      {/* Public Routes */}
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={user ? <Navigate to= "/profile" /> : <Login />} />
-      <Route path="/create-account" element={<CreateAccount />} />
-      <Route path="/about-us" element={<AboutPage />} />
-      <Route path="/contact-us" element={<ContactUs />} />
-      <Route path="/learn-more" element={<ArticalPage />} />
-      <Route path="/terms-of-use" element={<TermsOfUse />} />
-      <Route path="/privacy" element={<PrivacyPolicy />} />
-      <Route path="/disclaimer" element={<Disclaimer />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={user ? <Navigate to="/profile" /> : <Login />} />
+        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/about-us" element={<AboutPage />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/learn-more" element={<ArticalPage />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/disclaimer" element={<Disclaimer />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
-      {/* Protected Routes */}
-      <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to= "/login" />} />
-      <Route path="/trader-dashboard" element={user ? <TraderDashboard /> : <Navigate to= "/login" />} />
-      <Route path="/investor-dashboard" element={user ? <InvestorDashboard /> : <Navigate to= "/login" /> } />
+        {/* Protected Routes */}
+        <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
+        <Route path="/trader-dashboard" element={user ? <TraderDashboard /> : <Navigate to="/login" />} />
+        <Route path="/investor-dashboard" element={user ? <InvestorDashboard /> : <Navigate to="/login" />} />
 
-      {/* Catch-all for undefined routes */}
-      <Route path="*" element={<NotFoundPage />} />
+        {/* Catch-all for undefined routes */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
-
-    </>
+    </React.Fragment>
   );
 }
 
